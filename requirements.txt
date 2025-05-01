@@ -1,0 +1,21 @@
+# Core libraries
+pandas
+scikit-learn
+joblib
+nltk
+imblearn
+
+# Hugging Face API + Deep Learning backend
+transformers==4.38.0
+torch
+
+# Streamlit UI
+streamlit
+
+# Visualization / EDA
+matplotlib
+seaborn
+wordcloud
+
+# Utility
+tqdm

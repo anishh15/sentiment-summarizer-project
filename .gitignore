@@ -1,0 +1,16 @@
+# Ignore large files
+data/reviews.csv
+models/sentiment_model.zip
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
