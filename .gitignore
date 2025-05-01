@@ -1,5 +1,5 @@
 # Ignore large files
-data/reviews.csv
+data/Reviews.csv
 models/sentiment_model.zip
 
 # Ignore Python cache files
