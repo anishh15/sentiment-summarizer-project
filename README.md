@@ -109,5 +109,3 @@ The generated plots will be saved in the `visualizations/` directory.
 
 ## Authors
 - *Anish Laddha*
-- *Abhinav Dogra*
-- *Abhinav Thulal*
