@@ -16,7 +16,7 @@ from src.config import DATA_PATH, VISUALS_DIR, CLASSIFICATION_REPORT_PATH, CONFU
 # Setup directories
 os.makedirs(VISUALS_DIR, exist_ok=True)
 
-# Updated paths for classification report and confusion matrix
+# Loaded paths for classification report and confusion matrix
 classification_report_path = CLASSIFICATION_REPORT_PATH
 confusion_matrix_path = CONFUSION_MATRIX_PATH
 
@@ -27,7 +27,7 @@ stop_words = set(stopwords.words("english"))
 
 # Load dataset
 df = pd.read_csv(DATA_PATH)
-print("✅ Dataset loaded successfully for analysis!")
+print("Dataset loaded successfully for analysis!")
 
 # Clean data
 df.dropna(inplace=True)

@@ -29,7 +29,7 @@ CLASSIFIER_PATH = os.path.join(MODELS_DIR, "sentiment_model.joblib")
 REPORT_PATH = CLASSIFICATION_REPORT_PATH
 CONF_MATRIX_IMG = CONFUSION_MATRIX_PATH
 
-# Added error handling for model and vectorizer loading
+# Model and vectorizer loading
 try:
     vectorizer = joblib.load(VECTORIZER_PATH)
     model = joblib.load(CLASSIFIER_PATH)
@@ -40,7 +40,6 @@ except Exception as e:
     st.error(f"Error loading model or vectorizer: {e}")
     st.stop()
 
-# Replace T5 summarizer with Hugging Face Inference API
 HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
 HUGGING_FACE_API_KEY = os.getenv("HF_TOKEN")  # Load from environment variable
 
@@ -64,7 +63,7 @@ if choice == "Single Review":
                 proba = model.predict_proba(vec)[0]
                 summary = summarize_text(review_input)
 
-            # Decode prediction to string label before displaying
+            # Decode prediction to string label
             sentiment = "positive" if prediction == 1 else "negative"
             st.success(f"**Predicted Sentiment:** {sentiment.capitalize()}")
             st.write("**🔢 Prediction Probabilities:**")
@@ -78,7 +77,6 @@ if choice == "Single Review":
 elif choice == "Batch Upload":
     uploaded_file = st.file_uploader("Upload a CSV file (with a 'Text' column)", type=["csv"])
 
-    # Decode predicted sentiment to string labels before displaying
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
 
@@ -118,18 +116,18 @@ elif choice == "Model and Dataset":
 
     st.markdown("---")
 
-    # Display additional performance metrics
+    # Display performance metrics
     st.subheader("📈 Detailed Performance Metrics")
 
-    # Display classification report as a table
+    # Display classification report
     if os.path.exists(REPORT_PATH):
         report_df = pd.read_csv(REPORT_PATH)
         st.subheader("Classification Report")
-        st.dataframe(report_df)  # Use st.dataframe() to display as a table
+        st.dataframe(report_df)
     else:
         st.warning("Classification report not found.")
 
-    # Display confusion matrix image if available
+    # Display confusion matrix image
     if os.path.exists(CONF_MATRIX_IMG):
         st.image(CONF_MATRIX_IMG, caption="Confusion Matrix")
     else:
@@ -138,7 +136,7 @@ elif choice == "Model and Dataset":
     st.markdown("---")
 
     st.subheader("📈 Visuals from Data Analysis of Dataset")
-    # Display additional visuals if available
+    # Display additional visuals
     visuals_dir = "visualizations"
     visual_files = [
         ("sentiment_distribution.png", "Sentiment Distribution"),

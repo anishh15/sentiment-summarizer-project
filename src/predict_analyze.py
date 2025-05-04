@@ -24,8 +24,8 @@ def analyze_review(text):
     vec = vectorizer.transform([cleaned])
     sentiment_encoded = ensemble.predict(vec)[0]
     sentiment = "positive" if sentiment_encoded == 1 else "negative"  # Decode sentiment
-    summary = summarize_text(text)  # Removed unnecessary arguments
-    return sentiment, summary  # Return both sentiment and summary
+    summary = summarize_text(text)
+    return sentiment, summary
 
 # Confusion Matrix (for entire dataset)
 def plot_confusion_matrix(y_true, y_pred):

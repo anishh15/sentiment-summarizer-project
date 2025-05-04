@@ -43,8 +43,8 @@ except pd.errors.EmptyDataError:
     logger.error("File is empty or corrupted.")
     exit(1)
 
-# Limit dataset size for testing (optional)
-#df = df.sample(n=50000, random_state=42)  # Use only 50,000 samples for faster training
+# Use only 50,000 samples for faster training
+#df = df.sample(n=50000, random_state=42)
 
 # Clean & preprocess
 df.dropna(inplace=True)
@@ -66,9 +66,9 @@ df["Text_clean"] = df["Text"].apply(clean_text)
 
 # Encode target labels
 label_encoder = LabelEncoder()
-y_encoded = label_encoder.fit_transform(df["sentiment"])  # Converts 'negative' -> 0, 'positive' -> 1
+y_encoded = label_encoder.fit_transform(df["sentiment"])  # negative=0, positive=1
 
-# TF-IDF vectorization with reduced features
+# TF-IDF vectorization
 vectorizer = TfidfVectorizer(stop_words="english", max_features=10000, ngram_range=(1, 3))
 X_vec = vectorizer.fit_transform(df["Text_clean"])
 
@@ -77,7 +77,7 @@ logger.info("Applying SMOTE to balance classes...")
 smote = SMOTE(random_state=42)
 X_resampled, y_resampled = smote.fit_resample(X_vec, y_encoded)
 
-# Train-test split (stratified)
+# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42, stratify=y_resampled)
 logger.info("Stratified train-test split done")
 
@@ -90,7 +90,7 @@ logger.info(pd.Series(y_test).value_counts())
 # Define classifiers
 lr = LogisticRegression(max_iter=1000, class_weight='balanced')
 xgb = XGBClassifier(eval_metric='logloss', random_state=42)
-rf = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)  # Reduced number of trees to 50
+rf = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
 
 # Train classifiers with progress tracking
 classifiers = [('lr', lr), ('xgb', xgb), ('rf', rf)]
@@ -116,7 +116,7 @@ logger.info(f"Balanced Accuracy: {balanced_accuracy_score(label_encoder.inverse_
 logger.info(f"F1 Score (positive): {f1_score(label_encoder.inverse_transform(y_test), y_pred_decoded, pos_label='positive')}")
 logger.info(f"F1 Score (negative): {f1_score(label_encoder.inverse_transform(y_test), y_pred_decoded, pos_label='negative')}")
 
-# Save classification report and confusion matrix
+# Classification report and Confusion matrix
 report = classification_report(label_encoder.inverse_transform(y_test), y_pred_decoded, output_dict=True)
 pd.DataFrame(report).to_csv(os.path.join(MODELS_DIR, "classification_report.csv"))
 cm = ConfusionMatrixDisplay.from_predictions(label_encoder.inverse_transform(y_test), y_pred_decoded)
@@ -128,7 +128,7 @@ def analyze_review(text):
     cleaned = clean_text(text)
     vec = vectorizer.transform([cleaned])
     sentiment = label_encoder.inverse_transform(ensemble.predict(vec))[0]
-    return sentiment  # Only return sentiment
+    return sentiment
 
 logger.info("\nRunning a test example...\n")
 sample = df["Text"].iloc[0]
